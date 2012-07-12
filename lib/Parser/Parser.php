@@ -27,8 +27,17 @@ class Parser
     }
 
     /**
+     * get($name) looks for classes in this order:
+     *     <li>{base namespace}\$name</li>
+     *     <li>Parser\$name</li>
+     *     <li>{base namespace}\$name\$name.Parser</li>
+     *     <li>Parser\$name\$name.Parser</li>
+     * 
+     * get($name, $type) looks for object-specific classes:
+     *     <li>{base namespace}\$type\Objects\$name.Parser</li>
+     * 
      * @param string $name
-     * @param string $type
+     * @param string $type = null
      * @throws ParserException
      * @return Parser\Base\ParserInterface
      */
@@ -44,22 +53,28 @@ class Parser
         {
             //look for primitive parser class
             if ($class = $this->getClass($name))
+            {
                 $this->loaded_parsers[$name] = $class;
                 return $class;
+            }
 
             //look for datatype parser, i.e. JSON\Base\JSONParser
             $typeName = $name . '\\' . $name . 'Parser';
             if ($class = $this->getClass($typeName))
+            {
                 $this->loaded_parsers[$name] = $class;
                 return $class;
+            }
         } 
         else 
         {
             //look for object-specific parser in project namespace
-            $typeName = $this->base_namespace.$type . '\\Object\\' . $name . 'Parser';
+            $typeName = $this->base_namespace.'\\'.$type . '\\Objects\\' . $name . 'Parser';
             if (class_exists($typeName))
-                $this->loaded_parsers[$type][$name] = $class;
-                return new $class;
+            {
+                $this->loaded_parsers[$type][$name] = new $typeName;
+                return $this->loaded_parsers[$type][$name];
+            }
         }
         throw new ParserException($name . ' parser not found');
     }

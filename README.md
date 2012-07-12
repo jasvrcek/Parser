@@ -25,11 +25,11 @@ $string = $p->get('CamelCase')->getOutput('example string');
 
 
 You can add custom parsers in your project, override existing ones. 
-The following example will load \MyProject\Parsers\JSON\Object\MyCustomObjectParser to convert the json string into an instance of MyCustomObject.
+The following example will load \MyProject\Parsers\JSON\Objects\MyCustomObjectParser to convert the json string into an instance of MyCustomObject.
 ```php
 $p = new \Parser\Parser('\\MyProject\\Parsers');
 
-$myCustomObjectInstance = $p->get('MyCustomObjectParser', 'JSON')->getOutput('{ "a_property": "example string" }');
+$myCustomObjectInstance = $p->get('MyCustomObject', 'JSON')->getOutput('{ "a_property": "example string" }');
 ```
 The above example could actually use the included "JSONParser":
 
