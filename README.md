@@ -24,5 +24,5 @@ $string = $p->get('CamelCase')->getOutput('example string');
 $p = new \Parser\Parser('\\MyProject\\Parsers');
 
 //get custom parser (must implement \Parser\ParserInterface)
-$string = $p->get('MyJsonToObjectParser', 'JSON')->getOutput('example string');
+$string = $p->get('MyJsonToObjectParser', 'JSON')->getOutput('{ "a_property": "example string" }');
 ```
